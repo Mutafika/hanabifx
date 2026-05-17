@@ -1,0 +1,20 @@
+accepted = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "CC0-1.0",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "MPL-2.0",
+    "CDLA-Permissive-2.0",
+    "0BSD",
+]
+
+# Skip workspace-internal crates (matcha-* and sibling sabitori-* path deps),
+# all of which have `publish = false`.
+[private]
+ignore = true

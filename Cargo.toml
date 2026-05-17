@@ -1,0 +1,37 @@
+[package]
+name = "hanabifx"
+version = "0.1.0"
+edition = "2024"
+description = "Press keys, get fireworks. A standalone macOS particle FX overlay."
+license = "MIT OR Apache-2.0"
+authors = ["mutafika"]
+repository = "https://github.com/Mutafika/hanabifx"
+publish = false
+
+[dependencies]
+sabitori = { git = "https://github.com/Mutafika/sabitori", branch = "main" }
+winit = "0.30"
+raw-window-handle = "0.6"
+block2 = "0.5"
+objc2 = "0.5"
+objc2-foundation = { version = "0.2", features = [
+    "NSString",
+    "NSGeometry",
+] }
+objc2-app-kit = { version = "0.2", features = [
+    "NSApplication",
+    "NSEvent",
+    "NSResponder",
+    "NSScreen",
+] }
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+dirs = "5"
+
+[profile.release]
+strip = "symbols"
+
+# Local development override — drop or comment out if not iterating on
+# sabitori locally.
+[patch."https://github.com/Mutafika/sabitori"]
+sabitori = { path = "../sabitori/crates/sabitori" }
