@@ -2433,6 +2433,7 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 [[package]]
 name = "sabitori"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "console_error_panic_hook",
  "console_log",
@@ -2465,6 +2466,7 @@ dependencies = [
 [[package]]
 name = "sabitori-anim"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "sabitori-core",
 ]
@@ -2472,6 +2474,7 @@ dependencies = [
 [[package]]
 name = "sabitori-core"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "bytemuck",
  "glam",
@@ -2482,6 +2485,7 @@ dependencies = [
 [[package]]
 name = "sabitori-gpu"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "bytemuck",
  "glam",
@@ -2496,6 +2500,7 @@ dependencies = [
 [[package]]
 name = "sabitori-input"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "sabitori-core",
 ]
@@ -2503,6 +2508,7 @@ dependencies = [
 [[package]]
 name = "sabitori-layout"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "sabitori-core",
  "sabitori-style",
@@ -2512,6 +2518,7 @@ dependencies = [
 [[package]]
 name = "sabitori-net"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "image",
  "js-sys",
@@ -2526,6 +2533,7 @@ dependencies = [
 [[package]]
 name = "sabitori-scene"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "sabitori-core",
  "slotmap",
@@ -2534,6 +2542,7 @@ dependencies = [
 [[package]]
 name = "sabitori-style"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "sabitori-core",
  "serde",
@@ -2543,6 +2552,7 @@ dependencies = [
 [[package]]
 name = "sabitori-text"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "bytemuck",
  "cosmic-text",
@@ -2555,6 +2565,7 @@ dependencies = [
 [[package]]
 name = "sabitori-widgets"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "sabitori-anim",
  "sabitori-core",
@@ -2566,6 +2577,7 @@ dependencies = [
 [[package]]
 name = "sabitori-window"
 version = "0.1.0"
+source = "git+https://github.com/Mutafika/sabitori?branch=main#1405c76707f4653af01a1f8d08ca3218d3403933"
 dependencies = [
  "console_error_panic_hook",
  "console_log",
@@ -3739,7 +3751,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]

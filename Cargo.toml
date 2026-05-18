@@ -30,8 +30,3 @@ dirs = "5"
 
 [profile.release]
 strip = "symbols"
-
-# Local development override — drop or comment out if not iterating on
-# sabitori locally.
-[patch."https://github.com/Mutafika/sabitori"]
-sabitori = { path = "../sabitori/crates/sabitori" }
