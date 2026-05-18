@@ -24,20 +24,19 @@ BASE = 1024
 SIZE = BASE * SCALE
 
 # --- Palette --------------------------------------------------------------
-SKY_TOP = (18, 24, 58)        # deep night blue
-SKY_BOTTOM = (6, 8, 22)       # near-black
+SKY_TOP = (20, 28, 70)        # richer night blue (more contrast)
+SKY_BOTTOM = (3, 4, 14)       # near-black
 
-# Hanabi petal palette — classic Japanese fireworks colors.
+# Hanabi petal palette — punchy, saturated.
 PETAL_COLORS = [
-    (255, 220, 130),   # warm gold
-    (255, 138, 96),    # coral
-    (255, 90, 130),    # pink-red
-    (140, 200, 255),   # sky blue
-    (190, 150, 255),   # violet
-    (180, 255, 190),   # mint
+    (255, 225, 110),   # gold
+    (255, 110, 80),    # coral red
+    (255, 70, 140),    # magenta
+    (110, 200, 255),   # cyan
+    (200, 130, 255),   # violet
 ]
 
-CORE = (255, 245, 220)        # bright spark core
+CORE = (255, 250, 230)
 STAR = (255, 255, 245)
 
 
@@ -144,20 +143,19 @@ def add_glow(layer: Image.Image, blur: float, intensity: float = 1.0) -> Image.I
 
 
 def draw_core(cx: int, cy: int, r: float) -> Image.Image:
-    """Bright central flash with falloff."""
+    """Bright central flash with strong falloff."""
     layer = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
-    # Multiple concentric circles, decreasing alpha outward.
-    for i, (rr, a) in enumerate([
-        (r * 2.4, 22),
-        (r * 1.6, 60),
-        (r * 1.05, 140),
-        (r * 0.65, 220),
-        (r * 0.35, 255),
-    ]):
+    for rr, a in [
+        (r * 3.0, 35),
+        (r * 2.0, 90),
+        (r * 1.3, 170),
+        (r * 0.8, 235),
+        (r * 0.4, 255),
+    ]:
         d.ellipse((cx - rr, cy - rr, cx + rr, cy + rr),
                   fill=CORE + (a,))
-    return layer.filter(ImageFilter.GaussianBlur(SIZE * 0.003))
+    return layer.filter(ImageFilter.GaussianBlur(SIZE * 0.004))
 
 
 def render() -> Image.Image:
@@ -189,41 +187,40 @@ def render() -> Image.Image:
 
     # 3. Secondary smaller bursts (background, blurred for depth).
     for sx_frac, sy_frac, rad_frac, color in [
-        (0.22, 0.30, 0.10, PETAL_COLORS[3]),  # blue, upper-left
-        (0.78, 0.34, 0.08, PETAL_COLORS[1]),  # coral, upper-right
-        (0.30, 0.78, 0.07, PETAL_COLORS[4]),  # violet, lower-left
+        (0.20, 0.28, 0.11, PETAL_COLORS[3]),  # cyan, upper-left
+        (0.80, 0.32, 0.09, PETAL_COLORS[1]),  # coral, upper-right
+        (0.26, 0.80, 0.08, PETAL_COLORS[4]),  # violet, lower-left
     ]:
         sx = int(SIZE * sx_frac)
         sy = int(SIZE * sy_frac)
-        petals = 14
+        petals = 12
         burst = draw_hanabi(sx, sy, SIZE * rad_frac, petals, color, rng,
-                             width=max(2, int(SIZE * 0.0035)),
+                             width=max(3, int(SIZE * 0.005)),
                              color_mix=0.0)
-        burst = add_glow(burst, SIZE * 0.006, intensity=1.3)
-        # Slight overall blur — these are background fireworks.
+        burst = add_glow(burst, SIZE * 0.008, intensity=1.6)
         burst = burst.filter(ImageFilter.GaussianBlur(SIZE * 0.0015))
         icon = Image.alpha_composite(icon, _apply_mask(burst, mask))
 
-    # 4. Main hanabi — chrysanthemum burst with multi-color petals.
-    main_r = SIZE * 0.36
-    main = draw_hanabi(cx, cy, main_r, petals=28,
+    # 4. Main hanabi — fewer, thicker petals so it reads at 32px.
+    main_r = SIZE * 0.40
+    main = draw_hanabi(cx, cy, main_r, petals=18,
                         base_color=PETAL_COLORS[0], rng=rng,
-                        width=max(3, int(SIZE * 0.006)),
-                        color_mix=0.55)
+                        width=max(5, int(SIZE * 0.011)),
+                        color_mix=0.7)
 
-    # Add an inner shorter ring of petals for density (千輪-ish texture).
-    inner_ring = draw_hanabi(cx, cy, main_r * 0.55, petals=22,
+    # Inner shorter ring — thicker too.
+    inner_ring = draw_hanabi(cx, cy, main_r * 0.55, petals=14,
                               base_color=PETAL_COLORS[2], rng=rng,
-                              width=max(2, int(SIZE * 0.004)),
-                              color_mix=0.6)
+                              width=max(4, int(SIZE * 0.008)),
+                              color_mix=0.7)
     main = Image.alpha_composite(main, inner_ring)
 
-    # Glow bloom around the burst.
-    main = add_glow(main, SIZE * 0.012, intensity=1.5)
+    # Strong bloom around the burst.
+    main = add_glow(main, SIZE * 0.018, intensity=2.0)
     icon = Image.alpha_composite(icon, _apply_mask(main, mask))
 
-    # 5. Bright core flash.
-    core = draw_core(cx, cy, SIZE * 0.045)
+    # 5. Bigger, brighter core flash — anchors the icon at small sizes.
+    core = draw_core(cx, cy, SIZE * 0.075)
     icon = Image.alpha_composite(icon, _apply_mask(core, mask))
 
     # 6. A few scattered embers floating around the main burst.
