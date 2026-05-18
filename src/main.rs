@@ -436,6 +436,44 @@ fn configure_settings_window(window: &winit::window::Window) {
     }
 }
 
+/// バイナリ埋め込みの `hanabifx.icns` を `NSApplication.setApplicationIconImage:`
+/// に渡して dock icon にする。 Accessory policy 下では dock icon 自体が出ない
+/// のでこの呼び出しは noop に近い。 失敗 (NSImage init 失敗等) は黙って
+/// スキップ。
+#[cfg(target_os = "macos")]
+fn set_dock_icon() {
+    const ICON_BYTES: &[u8] = include_bytes!("../assets/icon/hanabifx.icns");
+    unsafe {
+        let ns_data_cls = match AnyClass::get("NSData") {
+            Some(c) => c,
+            None => return,
+        };
+        let data: *mut AnyObject = msg_send![
+            ns_data_cls,
+            dataWithBytes: ICON_BYTES.as_ptr() as *const std::ffi::c_void,
+            length: ICON_BYTES.len(),
+        ];
+        if data.is_null() {
+            return;
+        }
+        let ns_image_cls = match AnyClass::get("NSImage") {
+            Some(c) => c,
+            None => return,
+        };
+        let img_alloc: *mut AnyObject = msg_send![ns_image_cls, alloc];
+        let image: *mut AnyObject = msg_send![img_alloc, initWithData: data];
+        if image.is_null() {
+            return;
+        }
+        let ns_app_cls = match AnyClass::get("NSApplication") {
+            Some(c) => c,
+            None => return,
+        };
+        let app: *mut AnyObject = msg_send![ns_app_cls, sharedApplication];
+        let _: () = msg_send![app, setApplicationIconImage: image];
+    }
+}
+
 /// `Config::config_path` と同じ場所に書き戻す。 載っているフィールドだけ
 /// pretty toml で出力。
 fn save_config(cfg: &config::Config) -> std::io::Result<()> {
@@ -469,6 +507,10 @@ fn main() {
             };
             app.setActivationPolicy(policy);
         }
+        // バイナリに icns を埋め込んで dock icon にセット。 fx-only (Accessory)
+        // では dock icon が出ないので実質 edit モード用。 NSImage は icns
+        // フォーマットを native に解せる。
+        set_dock_icon();
     }
 
     let cfg = Arc::new(Mutex::new(config::Config::load_or_create()));
